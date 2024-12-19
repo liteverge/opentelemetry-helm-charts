@@ -250,6 +250,25 @@ components:
         value: "8013"
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
         value: http://$(OTEL_COLLECTOR_NAME):4317
+      - name: OTEL_LOGS_EXPORTER
+        value: "otel"
+      - name: OTEL_LOG_RECORDS_TYPE
+        value: "json"
+    podAnnotations:
+      sidecar.otel.logs.enabled: "true"
+    sidecarContainers:
+      - name: otel-collector-sidecar
+        image: otel/opentelemetry-collector:latest
+        ports:
+          - containerPort: 4317
+            name: otlp
+            protocol: TCP
+        env:
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            value: http://$(OTEL_COLLECTOR_NAME):4317
+        resources:
+          limits:
+            memory: 20Mi
     resources:
       limits:
         memory: 20Mi
