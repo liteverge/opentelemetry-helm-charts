@@ -250,9 +250,30 @@ components:
         value: "8013"
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
         value: http://$(OTEL_COLLECTOR_NAME):4317
+      - name: OTEL_LOGS_EXPORTER
+        value: "otel"
+      - name: OTEL_LOG_RECORDS_TYPE
+        value: "json"
+    podAnnotations:
+      sidecar.otel.logs.enabled: "true"
+    sidecarContainers:
+      - name: otel-collector-sidecar
+        imageOverride:
+          repository: "otel/opentelemetry-collector-contrib"
+          tag: "0.114.0"
+        useDefault:
+          env: true
+        service:
+          port: 4317
+        env:
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            value: http://$(OTEL_COLLECTOR_NAME):4317
+        resources:
+          limits:
+            memory: 64Mi
     resources:
       limits:
-        memory: 20Mi
+        memory: 64Mi
     initContainers:
       - name: wait-for-kafka
         image: busybox:latest
