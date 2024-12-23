@@ -47,6 +47,9 @@
     },
     "opensearch": {
       "type": "object"
+    },
+    "otel-collector-sidecar": {
+      "type": "object"
     }
   },
   "required": [
