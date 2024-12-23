@@ -256,18 +256,33 @@ components:
         value: "json"
     podAnnotations:
       sidecar.otel.logs.enabled: "true"
+    mountedEmptyDirs:
+      - name: log-volume
+        mountPath: /logs
+      - name: config-rw
+        mountPath: /etc/otel
     sidecarContainers:
       - name: otel-collector-sidecar
         imageOverride:
           repository: "otel/opentelemetry-collector-contrib"
-          tag: "0.114.0"
+          tag: "latest"
         useDefault:
           env: true
         service:
           port: 4317
-        env:
+        envOverrides:
           - name: OTEL_EXPORTER_OTLP_ENDPOINT
             value: http://$(OTEL_COLLECTOR_NAME):4317
+          - name: OTEL_LOGS_EXPORTER
+            value: "otel"
+          - name: OTEL_LOG_RECORDS_TYPE
+            value: "json"
+        args: ["--config=/etc/otel/otel-collector-config.yaml"]
+        volumeMounts:
+          - name: log-volume
+            mountPath: /logs
+          - name: config-rw
+            mountPath: /etc/otel
         resources:
           limits:
             memory: 64Mi
@@ -275,9 +290,21 @@ components:
       limits:
         memory: 64Mi
     initContainers:
+      - name: init-config
+        image: busybox
+        command: [ 'sh', '-c', 'cp /config-ro/otel-collector-sidecar-config.yaml /config-rw/otel-collector-sidecar-config.yaml && cat /config-rw/otel-collector-sidecar-config.yaml' ]
+        volumeMounts:
+          - mountPath: /config-ro
+            name: config-ro
+          - mountPath: /config-rw
+            name: config-rw
       - name: wait-for-kafka
         image: busybox:latest
         command: ['sh', '-c', 'until nc -z -v -w30 {{ include "otel-demo.name" . }}-kafka 9092; do echo waiting for kafka; sleep 2; done;']
+    additionalVolumes:
+      - name: config-ro
+        configMap:
+          name: '{{ include "otel-demo.name" . }}-otel-collector-sidecar-config'
 
   currencyService:
     enabled: true
