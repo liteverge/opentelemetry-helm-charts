@@ -260,7 +260,7 @@ components:
       - name: log-volume
         mountPath: /logs
       - name: config-rw
-        mountPath: /etc/otel
+        mountPath: /etc/otelcol-contrib
     sidecarContainers:
       - name: otel-collector-sidecar
         imageOverride:
@@ -277,12 +277,11 @@ components:
             value: "otel"
           - name: OTEL_LOG_RECORDS_TYPE
             value: "json"
-        args: ["--config=/etc/otel/otel-collector-config.yaml"]
         volumeMounts:
           - name: log-volume
             mountPath: /logs
           - name: config-rw
-            mountPath: /etc/otel
+            mountPath: /etc/otelcol-contrib
         resources:
           limits:
             memory: 64Mi
@@ -292,7 +291,7 @@ components:
     initContainers:
       - name: init-config
         image: busybox
-        command: [ 'sh', '-c', 'cp /config-ro/otel-collector-sidecar-config.yaml /config-rw/otel-collector-sidecar-config.yaml && cat /config-rw/otel-collector-sidecar-config.yaml' ]
+        command: [ 'sh', '-c', 'cp /config-ro/otel-collector-sidecar-config.yaml /config-rw/config.yaml && cat /config-rw/config.yaml' ]
         volumeMounts:
           - mountPath: /config-ro
             name: config-ro
