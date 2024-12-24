@@ -277,7 +277,7 @@ components:
             value: "otel"
           - name: OTEL_LOG_RECORDS_TYPE
             value: "json"
-        args: ["--config=/etc/otel/otel-collector-config.yaml"]
+        args: ["--config=/etc/otel/otel-collector-sidecar-config.yaml"]
         volumeMounts:
           - name: log-volume
             mountPath: /logs
