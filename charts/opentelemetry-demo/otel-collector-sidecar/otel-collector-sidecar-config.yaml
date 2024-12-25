@@ -1,14 +1,15 @@
 receivers:
   filelog:
-    include:
-      - /logs/*.log
-    start_at: beginning
+    include: [/logs/*.log]
     operators:
-      - type: regex_parser
-        regex: '^(?P<timestamp>\S+)\s+(?P<level>[A-Z]+)\s+(?P<message>.*)$'
+      - type: json_parser
         timestamp:
-          parse_from: timestamp
-          format: '%Y-%m-%dT%H:%M:%S'
+          parse_from: attributes.timestamp
+          layout: '%Y-%M-%DT%HH:%MM:%SS%Z'
+        severity:
+          parse_from: attributes.severity
+        message:
+          parse_from: attributes.message
 
 exporters:
   otlp:
