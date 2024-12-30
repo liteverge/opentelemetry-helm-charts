@@ -5,11 +5,21 @@ receivers:
       - type: json_parser
         timestamp:
           parse_from: attributes.timestamp
-          layout: '%Y-%M-%DT%HH:%MM:%SS%Z'
+          layout: '%Y-%m-%dT%H:%M:%S.%fZ'
         severity:
           parse_from: attributes.severity
         message:
           parse_from: attributes.message
+
+processors:
+  resource:
+    attributes:
+      - key: service.instance.id
+        from_attribute: k8s.pod.uid
+        action: insert
+      - key: service.name
+        value: "${OTEL_SERVICE_NAME}"
+        action: insert
 
 exporters:
   otlp:
@@ -21,4 +31,5 @@ service:
   pipelines:
     logs:
       receivers: [filelog]
+      processors: [resource]
       exporters: [otlp]
