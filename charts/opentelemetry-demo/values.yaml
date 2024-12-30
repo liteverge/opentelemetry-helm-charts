@@ -273,6 +273,9 @@ components:
           tag: "0.114.0"
         useDefault:
           env: true
+        presets:
+          kubernetesAttributes:
+            enabled: true
         service:
           port: 4317
         env:
