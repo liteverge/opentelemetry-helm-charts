@@ -1052,3 +1052,6 @@ opensearch:
   resources:
     limits:
       memory: 1Gi
+  plugins:
+    install:
+      - opensearch-anomaly-detection
