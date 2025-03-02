@@ -500,6 +500,40 @@ components:
         value: "8013"
       - name: OTEL_EXPORTER_OTLP_ENDPOINT
         value: http://$(OTEL_COLLECTOR_NAME):4317
+    podAnnotations:
+      sidecar.otel.logs.enabled: "true"
+    mountedEmptyDirs:
+      - name: log-volume
+        mountPath: /logs
+      - name: config-rw
+        mountPath: /etc/otelcol-contrib
+    sidecarContainers:
+      - name: otel-collector-sidecar
+        imageOverride:
+          repository: "otel/opentelemetry-collector-contrib"
+          tag: "latest"
+        useDefault:
+          env: true
+        presets:
+          kubernetesAttributes:
+            enabled: true
+        service:
+          port: 4317
+        envOverrides:
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            value: http://$(OTEL_COLLECTOR_NAME):4317
+          - name: OTEL_LOGS_EXPORTER
+            value: "otel"
+          - name: OTEL_LOG_RECORDS_TYPE
+            value: "json"
+        volumeMounts:
+          - name: log-volume
+            mountPath: /logs
+          - name: config-rw
+            mountPath: /etc/otelcol-contrib
+        resources:
+          limits:
+            memory: 64Mi
     resources:
       limits:
         memory: 120Mi
@@ -507,6 +541,19 @@ components:
       runAsUser: 1000  # node
       runAsGroup: 1000
       runAsNonRoot: true
+    initContainers:
+      - name: init-config
+        image: busybox
+        command: [ 'sh', '-c', 'cp /config-ro/otel-collector-sidecar-config.yaml /config-rw/config.yaml && cat /config-rw/config.yaml' ]
+        volumeMounts:
+          - mountPath: /config-ro
+            name: config-ro
+          - mountPath: /config-rw
+            name: config-rw
+    additionalVolumes:
+      - name: config-ro
+        configMap:
+          name: '{{ include "otel-demo.name" . }}-otel-collector-sidecar-config'
 
   product-catalog:
     enabled: true
