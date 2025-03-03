@@ -23,7 +23,7 @@ processors:
 
 exporters:
   otlp:
-    endpoint: "http://opentelemetry-demo-otelcol:4317"
+    endpoint: "http://${OTEL_COLLECTOR_NAME}:4317"
     tls:
       insecure: true
 
