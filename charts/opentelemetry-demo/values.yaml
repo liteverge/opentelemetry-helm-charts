@@ -291,6 +291,10 @@ components:
     resources:
       limits:
         memory: 64Mi
+    securityContext:
+      runAsUser: 1000  # node
+      runAsGroup: 1000
+      runAsNonRoot: true
     initContainers:
       - name: init-config
         image: busybox
