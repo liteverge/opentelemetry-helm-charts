@@ -297,10 +297,10 @@ components:
             mountPath: /etc/otelcol-contrib
         resources:
           limits:
-            memory: 64Mi
+            memory: 120Mi
     resources:
       limits:
-        memory: 64Mi
+        memory: 120Mi
     securityContext:
       runAsUser: 1000  # node
       runAsGroup: 1000
@@ -573,7 +573,7 @@ components:
             mountPath: /etc/otelcol-contrib
         resources:
           limits:
-            memory: 64Mi
+            memory: 120Mi
     resources:
       limits:
         memory: 120Mi
