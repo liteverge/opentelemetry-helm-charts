@@ -254,6 +254,10 @@ components:
         value: "otel"
       - name: OTEL_LOG_RECORDS_TYPE
         value: "json"
+      - name: OTEL_COLLECTOR_HOST
+        value: $(OTEL_COLLECTOR_NAME)
+      - name: OTEL_COLLECTOR_PORT_GRPC
+        value: "4317"
     podAnnotations:
       sidecar.otel.logs.enabled: "true"
     mountedEmptyDirs:
@@ -889,14 +893,14 @@ opentelemetry-collector:
       pipelines:
         traces:
           processors: [memory_limiter, resource, transform, batch]
-          exporters: [otlp, debug, spanmetrics]
+          exporters: [otlp, debug, spanmetrics, clickhouse]
         metrics:
           receivers: [httpcheck/frontend-proxy, redis, otlp, spanmetrics]
           processors: [memory_limiter, resource, batch]
-          exporters: [otlphttp/prometheus, debug]
+          exporters: [otlphttp/prometheus, debug, clickhouse]
         logs:
           processors: [memory_limiter, resource, batch]
-          exporters: [opensearch, debug]
+          exporters: [opensearch, debug, clickhouse]
       telemetry:
         metrics:
           level: detailed
