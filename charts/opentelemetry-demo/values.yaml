@@ -847,6 +847,32 @@ opentelemetry-collector:
           endpoint: http://opensearch:9200
           tls:
             insecure: true
+      clickhouse:
+        endpoint: tcp://127.0.0.1:9000?dial_timeout=10s
+        database: otel
+        async_insert: true
+        ttl: 72h
+        compress: lz4
+        create_schema: true
+        logs_table_name: demo_otel_logs
+        traces_table_name: demo_otel_traces
+        timeout: 5s
+        metrics_tables:
+          gauge:
+            name: "demo_otel_metrics_gauge"
+          sum:
+            name: "demo_otel_metrics_sum"
+          summary:
+            name: "demo_otel_metrics_summary"
+          histogram:
+            name: "demo_otel_metrics_histogram"
+          exponential_histogram:
+            name: "demo_otel_metrics_exp_histogram"
+        retry_on_failure:
+          enabled: true
+          initial_interval: 5s
+          max_interval: 30s
+          max_elapsed_time: 300s
 
     processors:
       # This processor is used to help limit high cardinality on next.js span names
