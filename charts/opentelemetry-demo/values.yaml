@@ -841,32 +841,9 @@ opentelemetry-collector:
           endpoint: http://opensearch:9200
           tls:
             insecure: true
-      clickhouse:
-        endpoint: tcp://127.0.0.1:9000?dial_timeout=10s
-        database: otel
-        async_insert: true
-        ttl: 72h
-        compress: lz4
-        create_schema: true
-        logs_table_name: demo_otel_logs
-        traces_table_name: demo_otel_traces
-        timeout: 5s
-        metrics_tables:
-          gauge:
-            name: "demo_otel_metrics_gauge"
-          sum:
-            name: "demo_otel_metrics_sum"
-          summary:
-            name: "demo_otel_metrics_summary"
-          histogram:
-            name: "demo_otel_metrics_histogram"
-          exponential_histogram:
-            name: "demo_otel_metrics_exp_histogram"
-        retry_on_failure:
-          enabled: true
-          initial_interval: 5s
-          max_interval: 30s
-          max_elapsed_time: 300s
+      otlphttp:
+        logs_endpoint: some-liteverge-endpoint
+        encoding: json
 
     processors:
       # This processor is used to help limit high cardinality on next.js span names
@@ -893,14 +870,14 @@ opentelemetry-collector:
       pipelines:
         traces:
           processors: [memory_limiter, resource, transform, batch]
-          exporters: [otlp, debug, spanmetrics, clickhouse]
+          exporters: [otlp, debug, spanmetrics]
         metrics:
           receivers: [httpcheck/frontend-proxy, redis, otlp, spanmetrics]
           processors: [memory_limiter, resource, batch]
-          exporters: [otlphttp/prometheus, debug, clickhouse]
+          exporters: [otlphttp/prometheus, debug]
         logs:
           processors: [memory_limiter, resource, batch]
-          exporters: [opensearch, debug, clickhouse]
+          exporters: [opensearch, debug, otlphttp]
       telemetry:
         metrics:
           level: detailed
