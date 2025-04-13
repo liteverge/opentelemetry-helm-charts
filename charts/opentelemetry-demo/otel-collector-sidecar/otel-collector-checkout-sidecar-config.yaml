@@ -11,6 +11,9 @@ receivers:
           parse_from: attributes.severity
         message:
           parse_from: attributes.message
+      - type: copy
+        from: attributes.message
+        to: body
 
 processors:
   resource:

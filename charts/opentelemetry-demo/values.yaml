@@ -312,7 +312,7 @@ components:
     initContainers:
       - name: init-config
         image: busybox
-        command: [ 'sh', '-c', 'cp /config-ro/otel-collector-sidecar-config.yaml /config-rw/config.yaml && cat /config-rw/config.yaml' ]
+        command: [ 'sh', '-c', 'cp /config-ro/otel-collector-checkout-sidecar-config.yaml /config-rw/config.yaml && cat /config-rw/config.yaml' ]
         volumeMounts:
           - mountPath: /config-ro
             name: config-ro
@@ -588,7 +588,7 @@ components:
     initContainers:
       - name: init-config
         image: busybox
-        command: [ 'sh', '-c', 'cp /config-ro/otel-collector-sidecar-config.yaml /config-rw/config.yaml && cat /config-rw/config.yaml' ]
+        command: [ 'sh', '-c', 'cp /config-ro/otel-collector-payment-sidecar-config.yaml /config-rw/config.yaml && cat /config-rw/config.yaml' ]
         volumeMounts:
           - mountPath: /config-ro
             name: config-ro
