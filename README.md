@@ -1,6 +1,6 @@
 # OpenTelemetry Helm Charts
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/opentelemetry-helm)](https://artifacthub.io/packages/search?repo=opentelemetry-helm)
 
 This repository contains [Helm](https://helm.sh/) charts for OpenTelemetry project.
@@ -38,6 +38,13 @@ The chart can be used to install [OpenTelemetry Operator](https://github.com/ope
 in a Kubernetes cluster. More detailed documentation can be found in
 [OpenTelemetry Operator chart directory](./charts/opentelemetry-operator).
 
+
+### OpenTelemetry eBPF Instrumentation
+
+The chart can be used to install [OpenTelemetry eBPF Instrumentation](https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation)
+in a Kubernetes cluster. More detailed documentation can be found in
+[OpenTelemetry eBPF Instrumentation chart directory](./charts/opentelemetry-ebpf-instrumentation).
+
 ## Contributing
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md).
@@ -55,6 +62,7 @@ For more information about the maintainer role, see the [community repository](h
 - [Alex Birca](https://github.com/Allex1), Adobe
 - [Jared Tan](https://github.com/JaredTan95), DaoCloud
 - [Josh Voravong](https://github.com/jvoravong), Splunk
+- [Juliano Costa](https://github.com/julianocosta89), Datadog
 - [Pierre Tessier](https://github.com/puckpuck), Honeycomb
 - [Povilas](https://github.com/povilasv), Coralogix
 
