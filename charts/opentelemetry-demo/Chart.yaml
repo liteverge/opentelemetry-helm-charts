@@ -17,6 +17,8 @@ appVersion: 2.1.3
 dependencies:
   - name: opentelemetry-collector
     version: 0.134.0
+    # TODO: Switch to liteverge repository after first successful release
+    # repository: https://liteverge.github.io/opentelemetry-helm-charts
     repository: https://open-telemetry.github.io/opentelemetry-helm-charts
     condition: opentelemetry-collector.enabled
   - name: jaeger
